@@ -7,7 +7,11 @@ const validateInput = require('../validateInput');
 
 const testimonialSchema = Joi.object({
     id: Joi.number().required(),
-    author: Joi.string().required(),
+    author: Joi.string()
+        .alphanum()
+        .min(2)
+        .max(30)
+        .required(),
     text: Joi.string().required(),
 });
 
@@ -29,6 +33,7 @@ router.get('/testimonials',
 
 // Endpoint dla konkretnego zasobu po ID
 router.get('/testimonials/:id',
+    // validateInput(testimonialSchema),
     (req, res) => {
         const testimonialId = parseInt(req.params.id, 10);
         const testimonial = db.testimonials.find(item => item.id === testimonialId);
@@ -41,7 +46,7 @@ router.get('/testimonials/:id',
 
 // Endpoint dla dodawania nowego elementu
 router.post('/testimonials',
-    //validateInput(testimonialSchema),
+    validateInput(testimonialSchema),
     (req, res) => {
         const { author, text } = req.body;
         const newTestimonial = {
@@ -56,7 +61,7 @@ router.post('/testimonials',
 // Endpoint dla modyfikacji author i text po ID
 router.put(
     '/testimonials/:id',
-    // validateInput(testimonialSchema),
+    //validateInput(testimonialSchema),
     (req, res) => {
         const testimonialId = parseInt(req.params.id, 10);
         const { author, text } = req.body;

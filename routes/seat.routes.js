@@ -1,8 +1,7 @@
+const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
 const db = require('../db');
-
 const validateInput = require('../validateInput');
 
 const seatSchema = Joi.object({
@@ -22,6 +21,7 @@ router.get('/seats',
 router.get('/seats/:id',
     //validateInput(seatSchema),
     (req, res) => {
+
         const seatId = parseInt(req.params.id, 10);
         const seat = db.seats.find(item => item.id === seatId);
 
@@ -29,7 +29,7 @@ router.get('/seats/:id',
     });
 
 router.post('/seats',
-    //validateInput(seatSchema),
+    validateInput(seatSchema),
     (req, res) => {
         const { day, seat, client, email } = req.body;
         const newSeat = {
